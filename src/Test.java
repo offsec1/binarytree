@@ -6,11 +6,12 @@ public class Test {
         String a = "asdf";
         BinaryTree<String> stringTree = new BinaryTree<>();
         stringTree.add(a);
+        stringTree.add(a);
 
         Integer b = 12;
         BinaryTree<Integer> integerTree = new BinaryTree<>(b);
 
-        //System.out.println(stringTree.toString());
+        System.out.println(stringTree.toString());
 
     }
 }

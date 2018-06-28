@@ -1,12 +1,16 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class BinaryTree <T> {
 
-    private Node root;
+    private List<Node> tree;
 
     /**
      * Empty constructor
      */
     public BinaryTree() {
-        this.root = null;
+        this.tree = new ArrayList<>(); //hmmmmmm
     }
 
     /**
@@ -14,31 +18,28 @@ public class BinaryTree <T> {
      * @param data root element
      */
     public BinaryTree(T data) {
-        this.root = new Node(data);
+        this.tree = new ArrayList<>(); //hmmmmmmm
+        this.tree.add(new Node(data));
     }
 
     public void add(T data) {
 
-        //initial Object
-        if (root == null)
-            root = new Node(data);
-        else {
+        Node newNode = new Node(data);
 
-            //TODO PM: HERE YOU GO THIS IS WROOOONG!!!!
-            Node currentNode = root;
-            Node previousNode = null;
+        tree.add(newNode);
 
-            while (currentNode.childLeft != null && currentNode.childRight != null) {
-
-                previousNode = currentNode;
-                currentNode = currentNode.childLeft; // or right!!!!11!!
-            }
-
+        for (Node n : tree) {
+            if (n.childLeft == null)
+                n.childLeft = newNode;
+            else if (n.childRight == null)
+                n.childRight = newNode;
         }
-
-        //TODO PM: add logic
     }
 
+    @Override
+    public String toString() {
+        return tree.toString();
+    }
 
     private class Node {
 
