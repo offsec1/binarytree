@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BinaryTree <T> {
@@ -10,25 +9,19 @@ public class BinaryTree <T> {
      * Empty constructor
      */
     public BinaryTree() {
-        this.tree = new ArrayList<>(); //hmmmmmm
-    }
-
-    /**
-     * Constructor which initialises the root element
-     * @param data root element
-     */
-    public BinaryTree(T data) {
-        this.tree = new ArrayList<>(); //hmmmmmmm
-        this.tree.add(new Node(data));
+        this.tree = new ArrayList<>();
     }
 
     public void add(T data) {
 
         Node newNode = new Node(data);
-
         tree.add(newNode);
 
         for (Node n : tree) {
+
+            if (n.childLeft != null && n.childRight != null)
+                continue;;
+
             if (n.childLeft == null)
                 n.childLeft = newNode;
             else if (n.childRight == null)
@@ -38,7 +31,16 @@ public class BinaryTree <T> {
 
     @Override
     public String toString() {
-        return tree.toString();
+        StringBuilder sb = new StringBuilder();
+
+        //TODO PM: add output logic
+        for (Node n : tree) {
+            sb.append(n.toString());
+            sb.append("   /\t \\\n");
+            
+        }
+
+        return sb.toString();
     }
 
     private class Node {
@@ -60,6 +62,12 @@ public class BinaryTree <T> {
             this.childRight = null;
         }
 
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("(" + this.data.toString() + ")");
+            return sb.toString();
+        }
     }
 
 }
