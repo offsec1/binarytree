@@ -13,15 +13,25 @@ public class Test {
         //Integer b = 12;
         //BinaryTree_obsolete<Integer> integerTree = new BinaryTree_obsolete<>();
 
-        stringTree.print();
-
-        stringTree.delete("qwer");
-        stringTree.print();
-
-        stringTree.deleteTree();
-        stringTree.print();
-
         //System.out.println(stringTree.toString());
+        stringTree.print();
 
+        //stringTree.delete("qwer");
+        //System.out.println(stringTree.toString());
+        stringTree.print();
+
+        //stringTree.deleteTree();
+        //System.out.println(stringTree.toString());
+        //stringTree.print();
+
+        //stringTree.add(b);
+        //stringTree.print();
+        //System.out.println(stringTree.toString());
+        //stringTree.print();
+
+        BinaryTreeUtils.exportBinaryTree(stringTree, "bintree.json");
+
+        BinaryTree<String> newTree = BinaryTreeUtils.importBinaryTree("bintree.json");
+        newTree.print();
     }
 }

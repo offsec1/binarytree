@@ -106,12 +106,14 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     /**
+     * TODO PM: maybe delete each node...
      * Deletes the whole binary tree
      */
     public void deleteTree() {
-        //TODO PM: maybe delete each node...
         root = null;
     }
+
+
 
 
     public void print() {
@@ -121,32 +123,47 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     private void structure(Node n) {
+
+        //StringBuilder sb = new StringBuilder();
+
         if (n != null) {
             grade++;
             structure(n.rightChild);
             grade--;
             for (int i = 0; i < grade; i++) {
                 System.out.print("    ");
+                //sb.append("    ");
             }
             System.out.println(" <- " + n.data);
+            //sb.append(" <- " + n.data);
             grade++;
             structure(n.leftChild);
             grade--;// rechter Unterbaum
         }
+        //return sb.toString();
     }
 
     //TODO PM: do this
     @Override
     public String toString() {
-        return super.toString();
+        //doesn't work
+        //return structure(root);
+        return "";
     }
 
+    /**
+     * private nested class 'Node'
+     */
     private class Node {
 
         public T data;
         public Node leftChild;
         public Node rightChild;
 
+        /**
+         * Constructor
+         * @param data the value which needs to be stored
+         */
         public Node(T data) {
             this.data = data;
             this.leftChild = null;
