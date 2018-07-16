@@ -1,100 +1,157 @@
-import java.util.ArrayList;
-import java.util.List;
+public class BinaryTree<T extends Comparable<T>> {
 
-public class BinaryTree <T> {
-
-    private List<Node> tree;
+    private Node root;
+    private int grade;
 
     /**
-     * Empty constructor
+     * Empty constructor which sets the root element to null
      */
     public BinaryTree() {
-        this.tree = new ArrayList<>();
+        root = null;
     }
 
+    /**
+     * Adds a new Node to the binary tree
+     * @param data the value of the Node
+     */
     public void add(T data) {
 
-        Node newNode = new Node(data);
-        tree.add(newNode);
+        if (root == null)
+            root = new Node(data);
+        else
+            recursiveAdd(root, data);
+    }
 
-        //don't process the root element
-        if (tree.size() > 1) {
+    /**
+     *
+     * @param n
+     * @param data
+     */
+    private void recursiveAdd(Node n, T data) {
 
-            for (Node n : tree) {
-
-                if (n.childLeft != null && n.childRight != null)
-                    continue;
-
-                if (n.childLeft == null) {
-                    n.childLeft = newNode;
-                    break;
-                }
-                else if (n.childRight == null) {
-                    n.childRight = newNode;
-                    break;
-                }
-            }
+        if (n.data.compareTo(data) > 0) {
+            if (n.leftChild == null)
+                n.leftChild = new Node(data);
+            else
+                recursiveAdd(n.leftChild, data);
+        }
+        else {
+            if (n.rightChild == null)
+                n.rightChild = new Node(data);
+            else
+                recursiveAdd(n.rightChild, data);
         }
     }
 
-    public void exportTree() {
-        //TODO PM: export tree to a file (xml would be nice but I guess bin or txt is appropriate for the exam)
+    /**
+     * Calls the recursiveDelete function if the root is not null
+     * If there is more than one node with the same data only the first occurrence is deleted
+     * @param data the data which is to be deleted
+     */
+    public void delete(T data) {
+
+        root = recursiveDelete(root, data);
     }
 
-    public void importTree() {
-        //TODO PM: import tree from file
+    /**
+     * Recursively loops the tree until it finds the given data and deletes it
+     * StackOverflow helped a lot there
+     * @see <a href="https://stackoverflow.com/questions/28397521/remove-recursively-from-a-binary-search-tree">StackOverflow - remove recursively from a binary searh tree</a>
+     * @param n the node object
+     * @param data the data which is removed
+     * @return
+     */
+    private Node recursiveDelete(Node n, T data) {
+
+        if (n == null)
+            return n;
+
+        if (n.data.compareTo(data) > 0) {
+            n.leftChild = recursiveDelete(n.leftChild, data);
+        }
+        else if (n.data.compareTo(data) < 0){
+            n.rightChild = recursiveDelete(n.rightChild, data);
+        }
+        else {
+
+            //node has only one or no child
+            if (n.leftChild == null)
+                return n.rightChild;
+            else if (n.rightChild == null)
+                return n.leftChild;
+
+            //node has two children
+            n.data = minNodeData(n.rightChild);
+            n.rightChild = recursiveDelete(n.rightChild, n.data);
+        }
+
+        return n;
     }
 
+    /**
+     * In order to remove an object without messing up the tree structure this helper method is used
+     * It finds the node which should replace the deleted one
+     * @param n node object
+     * @return minimal value in the subtree starting from given node
+     */
+    private T minNodeData(Node n) {
+        T minData = n.data;
+
+        while(n.leftChild != null) {
+            minData = n.leftChild.data;
+            n = n.leftChild;
+        }
+
+        return minData;
+    }
+
+    /**
+     * Deletes the whole binary tree
+     */
+    public void deleteTree() {
+        //TODO PM: maybe delete each node...
+        root = null;
+    }
+
+
+    public void print() {
+        System.out.println("\n --- Baum - Uebersicht --- \n");
+        grade = 0;
+        structure(root);
+    }
+
+    private void structure(Node n) {
+        if (n != null) {
+            grade++;
+            structure(n.rightChild);
+            grade--;
+            for (int i = 0; i < grade; i++) {
+                System.out.print("    ");
+            }
+            System.out.println(" <- " + n.data);
+            grade++;
+            structure(n.leftChild);
+            grade--;// rechter Unterbaum
+        }
+    }
+
+    //TODO PM: do this
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(tree.get(0).toString());
-
-        //TODO PM: add output logic (it's okay for testing but not good like this)
-        for (Node n : tree) {
-
-            if (n.childLeft == null && n.childRight == null)
-                break;
-
-            sb.append("\n   /\t \\\n");
-
-            if (n.childLeft != null)
-                sb.append(n.childLeft.toString());
-            if (n.childRight != null)
-                sb.append(n.childRight.toString());
-
-            sb.append("\n");
-        }
-
-        return sb.toString();
+        return super.toString();
     }
 
     private class Node {
 
-        /*
-        Maybe add:
-        int gradeOfPosition;
-        int xPosition;
-        int yPosition;
-         */
-
         public T data;
-        public Node childLeft;
-        public Node childRight;
+        public Node leftChild;
+        public Node rightChild;
 
-        public Node(T d) {
-            this.data = d;
-            this.childLeft = null;
-            this.childRight = null;
+        public Node(T data) {
+            this.data = data;
+            this.leftChild = null;
+            this.rightChild = null;
         }
 
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("(" + this.data.toString() + ")");
-            return sb.toString();
-        }
     }
-
 }
