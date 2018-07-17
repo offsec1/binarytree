@@ -1,6 +1,10 @@
+import java.util.ArrayList;
+
 public class BinaryTree<T extends Comparable<T>> {
 
     private Node root;
+    private ArrayList<Node> nodeList;
+
     private int grade;
 
     /**
@@ -8,6 +12,30 @@ public class BinaryTree<T extends Comparable<T>> {
      */
     public BinaryTree() {
         root = null;
+    }
+
+    /**
+     * Collects all Nodes and returns them
+     * @return all Nodes in an ArrayList
+     */
+    public ArrayList<Node> getBinaryTree() {
+        if (root == null)
+            return null;
+        nodeList = new ArrayList<>();
+        fillNodeList(root);
+        return nodeList;
+    }
+
+    /**
+     * Is called by the getBinaryTree function to collect all nodes recursively
+     * @param n node object
+     */
+    private void fillNodeList(Node n) {
+        if (n != null) {
+            nodeList.add(n);
+            fillNodeList(n.leftChild);
+            fillNodeList(n.rightChild);
+        }
     }
 
     /**
@@ -23,9 +51,9 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     /**
-     *
-     * @param n
-     * @param data
+     * Recursively loops the tree until it finds the right place to add the new node
+     * @param n the node object
+     * @param data data which is added
      */
     private void recursiveAdd(Node n, T data) {
 
@@ -63,8 +91,8 @@ public class BinaryTree<T extends Comparable<T>> {
      */
     private Node recursiveDelete(Node n, T data) {
 
-        if (n == null)
-            return n;
+        if (n == null || data == null)
+            return null;
 
         if (n.data.compareTo(data) > 0) {
             n.leftChild = recursiveDelete(n.leftChild, data);
@@ -114,8 +142,6 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
 
-
-
     public void print() {
         System.out.println("\n --- Baum - Uebersicht --- \n");
         grade = 0;
@@ -143,18 +169,10 @@ public class BinaryTree<T extends Comparable<T>> {
         //return sb.toString();
     }
 
-    //TODO PM: do this
-    @Override
-    public String toString() {
-        //doesn't work
-        //return structure(root);
-        return "";
-    }
-
     /**
      * private nested class 'Node'
      */
-    private class Node {
+    public class Node {
 
         public T data;
         public Node leftChild;
