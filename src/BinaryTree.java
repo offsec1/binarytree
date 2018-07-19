@@ -5,7 +5,8 @@ public class BinaryTree<T extends Comparable<T>> {
     private Node root;
     private ArrayList<Node> nodeList;
 
-    private int grade;
+    private int grade; //used for printing tree on console
+    private int w = 120, h=80; //used for the printing on the GUI
 
     /**
      * Empty constructor which sets the root element to null
@@ -19,9 +20,8 @@ public class BinaryTree<T extends Comparable<T>> {
      * @return all Nodes in an ArrayList
      */
     public ArrayList<Node> getBinaryTree() {
-        if (root == null)
-            return null;
         nodeList = new ArrayList<>();
+        grade = 0;
         fillNodeList(root);
         return nodeList;
     }
@@ -32,9 +32,13 @@ public class BinaryTree<T extends Comparable<T>> {
      */
     private void fillNodeList(Node n) {
         if (n != null) {
-            nodeList.add(n);
-            fillNodeList(n.leftChild);
+            grade++;
             fillNodeList(n.rightChild);
+            grade--;
+            nodeList.add(n);
+            grade++;
+            fillNodeList(n.leftChild);
+            grade--;
         }
     }
 
@@ -44,8 +48,11 @@ public class BinaryTree<T extends Comparable<T>> {
      */
     public void add(T data) {
 
-        if (root == null)
+        if (root == null) {
             root = new Node(data);
+            root.x = 400;
+            root.y = 60;
+        }
         else
             recursiveAdd(root, data);
     }
@@ -58,14 +65,22 @@ public class BinaryTree<T extends Comparable<T>> {
     private void recursiveAdd(Node n, T data) {
 
         if (n.data.compareTo(data) > 0) {
-            if (n.leftChild == null)
+            if (n.leftChild == null) {
                 n.leftChild = new Node(data);
+                n.leftChild.x = n.x - w;
+                n.leftChild.y = n.y + h;
+                w -=5;
+            }
             else
                 recursiveAdd(n.leftChild, data);
         }
         else {
-            if (n.rightChild == null)
+            if (n.rightChild == null) {
                 n.rightChild = new Node(data);
+                n.rightChild.x = n.x + w;
+                n.rightChild.y = n.y + h;
+                w -=5;
+            }
             else
                 recursiveAdd(n.rightChild, data);
         }
@@ -134,7 +149,6 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     /**
-     * TODO PM: maybe delete each node...
      * Deletes the whole binary tree
      */
     public void deleteTree() {
@@ -142,15 +156,20 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
 
+    /**
+     * Print the tree to the console
+     */
     public void print() {
         System.out.println("\n --- Baum - Uebersicht --- \n");
         grade = 0;
         structure(root);
     }
 
+    /**
+     * This actually prints the tree to the console recursively
+     * @param n node object
+     */
     private void structure(Node n) {
-
-        //StringBuilder sb = new StringBuilder();
 
         if (n != null) {
             grade++;
@@ -158,25 +177,23 @@ public class BinaryTree<T extends Comparable<T>> {
             grade--;
             for (int i = 0; i < grade; i++) {
                 System.out.print("    ");
-                //sb.append("    ");
             }
             System.out.println(" <- " + n.data);
-            //sb.append(" <- " + n.data);
             grade++;
             structure(n.leftChild);
-            grade--;// rechter Unterbaum
+            grade--;
         }
-        //return sb.toString();
     }
 
     /**
-     * private nested class 'Node'
+     * public nested class 'Node'
      */
     public class Node {
 
         public T data;
         public Node leftChild;
         public Node rightChild;
+        public int x, y;
 
         /**
          * Constructor

@@ -21,7 +21,7 @@ public class GUI extends JPanel {
 
         //Panel settings
         setLayout(new FlowLayout());
-        setPreferredSize(new Dimension(500, 500));
+        setPreferredSize(new Dimension(800, 600));
 
         //AddButton
         initAddButton();
@@ -142,61 +142,19 @@ public class GUI extends JPanel {
         super.paintComponent(g);
 
         ArrayList<BinaryTree<String>.Node> nodeList = binTree.getBinaryTree();
-        Rectangle r = this.getBounds();
-        int h = r.height - 400; //y
-        int w = r.width / 2; //x
 
-        if (nodeList != null) {
-            for (int i = 1; i <= nodeList.size(); i++) {
+        for (BinaryTree.Node n: nodeList) {
+            g.drawOval(n.x, n.y, 40, 40);
+            g.drawString(n.data.toString(), n.x +5, n.y+25);
 
-                if (i == 1) {
-                    //print root
-                    g.drawString(nodeList.get(i -1).data, w, h);
-                    g.drawOval(w, h, 25, 25);
-                    h += 20;
-                }
+            if(n.rightChild != null) {
+                g.drawLine(n.x+15, n.y+40, n.x+90, n.y+90);
+            }
 
-                if ( 2*i <= nodeList.size()) {
-                    //print first child
-                    if (nodeList.get(i).data.compareTo(nodeList.get(2*i -1).data) > 0) {
-                        w -= w/2;
-                        g.drawString(nodeList.get(2*i - 1).data, w, h);
-                        g.drawOval(w, h, 25, 25);
-                        w += w;
-                    }
-                    else {
-                        w += w/2;
-                        g.drawString(nodeList.get(2*i -1).data, w, h);
-                        g.drawOval(w, h, 25, 25);
-                        w /= w;
-                    }
-
-                }
-                if (2*i+1 <= nodeList.size()) {
-                    //print second child
-                    if (nodeList.get(i).data.compareTo(nodeList.get(2*i).data) > 0) {
-                        w -= w/2;
-                        g.drawString(nodeList.get(2*i - 1).data, w, h);
-                        g.drawOval(w, h, 25, 25);
-                        w += w;
-                    }
-                    else {
-                        w += w/2;
-                        g.drawString(nodeList.get(2*i).data, w, h);
-                        g.drawOval(w, h, 25, 25);
-                        w -= w;
-                    }
-                }
-                h += 40;
-
-                /*
-                g.drawString(NodeList.get(i - 1).data, x, y);
-                g.drawOval(x, y, 25, 25);
-                x = y += 20;
-                */
+            if(n.leftChild != null) {
+                g.drawLine(n.x+15, n.y+40, n.x-50, n.y+90);
             }
         }
-
     }
 
 }
