@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @author s0563806
+ * @author offsec1
  */
 public class Main {
 
